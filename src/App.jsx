@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-// import MapGoogle from './MapGoogle';
-// import JsonChart from './JsonChart';
-
+import Nav from './Nav';
+import Map from './Map';
 
 class App extends Component {
     render() {
         return (
             <div>
-                <h2>HELLO</h2>
+                <Nav />
+                <Map />
             </div>
         );
     }
