@@ -4,6 +4,8 @@
   "description": "The modelling team is looking to visualize data from newly acquired smart meters. These meters have geographic information (latitude and longitude) as well as demand associated with each meter. The modelling team wants to be able to select individual meters on a map (Google Maps) and visualize the demand at **every hour**. The modelling would also appreciate it if you could identify when the demand is above the threshold using a threshold line (shown in the mockup) and/or changing the colour of the points that are above the threshold to red.",
   "main": "index.js",
   "scripts": {
+    "start": "babel-node server.js",
+    "build": "webpack --progress --color --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jessica Liu",
