@@ -1,0 +1,24 @@
+{
+  "name": "meter-analysis",
+  "version": "1.0.0",
+  "description": "The modelling team is looking to visualize data from newly acquired smart meters. These meters have geographic information (latitude and longitude) as well as demand associated with each meter. The modelling team wants to be able to select individual meters on a map (Google Maps) and visualize the demand at **every hour**. The modelling would also appreciate it if you could identify when the demand is above the threshold using a threshold line (shown in the mockup) and/or changing the colour of the points that are above the threshold to red.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jessica Liu",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "highcharts": "^6.0.4",
+    "path": "^0.12.7",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "style-loader": "^0.19.1",
+    "webpack": "^3.10.0"
+  },
+  "license": "MIT"
+}

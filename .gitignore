@@ -1,0 +1,10 @@
+# Webpack output directory
+/dist
+
+.DS_Store
+
+# Dependency directories
+node_modules/
+
+# VS files
+.vscode/
