@@ -7,35 +7,45 @@ export default {
         zoomType: 'x'
     },
     title: {
-        text: 'Average Monthly Temperature and Rainfall'
+        text: 'Water Demand'
+    },
+    lang: {
+        thousandsSep: ','
     },
     yAxis: [{ // Primary yAxis
         labels: {
-            format: '{value}°C',
+            format: '{value}m3',
             style: {
                 color: Highcharts.getOptions().colors[1]
             }
         },
         title: {
-            text: 'Temperature',
+            text: 'Hourly Water Demand in m3',
             style: {
                 color: Highcharts.getOptions().colors[1]
             }
         }
     }, { // Secondary yAxis
         title: {
-            text: 'Rainfall',
+            text: 'Hourly Water Demand in USG',
             style: {
                 color: Highcharts.getOptions().colors[0]
             }
         },
         labels: {
-            format: '{value} mm',
+            format: '{value} USG',
             style: {
                 color: Highcharts.getOptions().colors[0]
             }
         },
         opposite: true
+    }],
+    xAxis: [{
+        type: 'datetime',
+        title: {
+            text: 'Date'
+        },
+        crosshair: true
     }],
     tooltip: {
         shared: true

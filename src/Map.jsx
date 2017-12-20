@@ -11,6 +11,8 @@ class Map extends Component {
             chart: null,
             details: null
         };
+        this.map = null;
+        this.markers = [];
     }
 
     componentDidMount() {
@@ -61,6 +63,11 @@ class Map extends Component {
             for (let meterID in results){
                 this.addMarker(meterID, results[meterID]);
             }
+
+            // add cluster support
+            let markerCluster = new MarkerClusterer(this.map, this.markers,
+                {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+    
         }). catch(err => {
             console.log(err);
         })
@@ -79,6 +86,8 @@ class Map extends Component {
         
         marker.addListener('click', 
             this.getClickHandler(meterID, meterData));
+
+        this.markers.push(marker);
     }
 
     // closure function to pass data to clickhandler

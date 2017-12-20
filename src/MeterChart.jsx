@@ -10,6 +10,8 @@ class MeterChart extends Component {
         super(props);
         this.state = {};
         this.chartOptions = chartOptions;
+        this.avgData = []
+        this.maxData = []
     }
 
     componentDidMount(){
@@ -21,7 +23,51 @@ class MeterChart extends Component {
             });
         }
 
-        this.compileData(this.props.meterID, this.props.data);
+        this.compileData(this.props.data);
+
+        this.chartOptions.subtitle = {
+            text: this.props.meterID
+        }
+
+        this.chartOptions.series = [
+            {
+                name: 'Hourly Average Water Demand (m3)',
+                type: 'column',
+                data: this.avgData,
+                color: Highcharts.getOptions().colors[0],
+                tooltip: {
+                    valueSuffix: 'm3'
+                }
+            },
+            {
+                name: 'Hourly Maximum Water Demand (m3)',
+                type: 'column',
+                data: this.maxData,
+                color: Highcharts.getOptions().colors[1],
+                tooltip: {
+                    valueSuffix: 'm3'
+                }
+            },
+            {
+                name: 'Hourly Average Water Demand (USG)',
+                type: 'spline',
+                yAxis: 1,
+                data: this.avgData.map(d => {
+                    return {
+                        x: d.x, 
+                        y: d.y * 264.17, 
+                        color: d.color
+                    }
+                }),
+                color: Highcharts.getOptions().colors[2],
+                tooltip: {
+                    valueSuffix: 'USG'
+                },
+                marker: {
+                        enabled: false
+                }
+            },
+        ]
 
         // create chart
         this.chart = new Highcharts[this.props.type || "Chart"](
@@ -32,56 +78,70 @@ class MeterChart extends Component {
     }
 
     // takes data from props and compils into chart options
-    compileData = (meterID, data) => {
+    compileData = (data) => {
+
+        let sumValue = 0.0;
+        let countValue = 0;
+        let maxValue = 0.0;
+        let targetDateHour = null;
         
-        // reformat data
-        let graphData = []
         for (let point of data.demand_ts) {
-            let color = 'blue';
-            if (parseFloat(point.demand_value) > data.threshold) {
-                color = 'red';
+            
+            // get current data point timestamp and convert it to javascript Date object
+            // injecting UTC timezone (:00.000Z) to force this timestamp as UTC timezone
+            // or else this timestamp will be converted to local timezone to this machine
+            let curDateHour = new Date(point.timestamp + ':00.000Z');
+            // remove minutes/seconds/milliseconds from data point time
+            curDateHour.setMinutes(0);
+            curDateHour.setSeconds(0, 0);
+            
+            // if targetDateHour is null, this is our first iteration
+            // reset targetDateHour, sumValue, countValue to start calculating
+            if (targetDateHour === null) {
+                targetDateHour = curDateHour;
+                let val = parseFloat(point.demand_value);
+                sumValue = val;
+                maxValue = val;
+                countValue = 1;
+                continue;
             }
-            graphData.push({
-                x: Date.parse(point.timestamp), 
-                y: parseFloat(point.demand_value),
-                color: color
-            });
+            
+            if (targetDateHour.getTime() === curDateHour.getTime()) {
+                // if current data point date/hour is same as targetDateHour date/hour
+                let value = parseFloat(point.demand_value);
+                sumValue += value;
+                maxValue = Math.max(maxValue, value);
+                countValue++;
+
+            } else {
+                // if current date point date/hour is different from targetDateHour date/hour,    
+                // calculate & push
+                this.pushResult(this.avgData, targetDateHour, sumValue/countValue, data.threshold, Highcharts.getOptions().colors[0]);
+                this.pushResult(this.maxData, targetDateHour, maxValue, data.threshold, Highcharts.getOptions().colors[3]);
+                
+                // reset targetDateHour, sumValue, countValue
+                targetDateHour = curDateHour;
+                let val = parseFloat(point.demand_value);
+                sumValue = val;
+                maxValue = val;
+                countValue = 1;
+            }
         }
-        
-        this.chartOptions.subtitle = {
-            text: meterID
+
+        // we still need to calculate final value and push
+        this.pushResult(this.avgData, targetDateHour, sumValue/countValue, data.threshold, Highcharts.getOptions().colors[0]);
+        this.pushResult(this.maxData, targetDateHour, maxValue, data.threshold, Highcharts.getOptions().colors[3]);
+    }
+
+    pushResult = (arr, timestamp, value, threshold, color) => {
+        if (value > threshold) {
+            color = 'red';
         }
-
-        this.chartOptions.series = [
-            {
-                name: 'Water Demand',
-                type: 'column',
-                data: graphData,
-                color: Highcharts.getOptions().colors[0],
-                tooltip: {
-                    valueSuffix: ' mm'
-                }
-            },
-            {
-                name: 'Water Demand',
-                yAxis: 1,
-                data: graphData,
-                color: Highcharts.getOptions().colors[1],
-                tooltip: {
-                    valueSuffix: ' mm'
-                },
-                //threshold: 100
-            },
-        ]
-
-        this.chartOptions.xAxis = [{
-            type: 'datetime',
-            title: {
-                text: 'Date'
-            },
-            crosshair: true
-        }];
-
+        arr.push({
+            x: timestamp,
+            y: parseFloat(value),
+            color: color
+        });
     }
 
     // unmount chart
