@@ -21,13 +21,12 @@ class MeterChart extends Component {
             });
         }
 
-
         this.compileData(this.props.meterID, this.props.data);
 
         // create chart
         this.chart = new Highcharts[this.props.type || "Chart"](
             this.props.container, 
-            this.optionsData
+            this.chartOptions
         );
 
     }

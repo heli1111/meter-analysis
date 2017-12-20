@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MeterChart from './MeterChart';
+import Details from './Details';
 import Export from 'highcharts/modules/exporting';
 
 class Map extends Component {
@@ -7,7 +8,8 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            chart: null
+            chart: null,
+            details: null
         };
     }
 
@@ -82,6 +84,7 @@ class Map extends Component {
     // closure function to pass data to clickhandler
     getClickHandler = (meterID, meterData) => {
         return () => {
+            // add new chart
             let newChart = <MeterChart 
                 modules={[Export]}
                 container="chart"
@@ -90,6 +93,15 @@ class Map extends Component {
             />;
             this.setState({chart: null});
             this.setState({chart: newChart});
+            // add new details
+            let newDetails = <Details
+                meter_id={meterID}
+                threshold={1}
+                average={2}
+                cost={3}
+            />;
+            this.setState({details: null});
+            this.setState({details: newDetails});
         }
     }
 
@@ -110,6 +122,7 @@ class Map extends Component {
             <div>
                 <div id="map" style={{height:'300px', width:'100%'}}></div>
                 {this.state.chart}
+                {this.state.details}
             </div>
         );
     }
