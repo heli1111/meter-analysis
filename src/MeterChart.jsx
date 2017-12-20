@@ -9,13 +9,8 @@ class MeterChart extends Component {
     constructor(props){
         super(props);
         this.state = {};
-        this.optionsData = chartOptions;
+        this.chartOptions = chartOptions;
     }
-
-    /*
-    ComponentDidMount() => data is available
-    since it is created whenever marker is created
-    */
 
     componentDidMount(){
 
@@ -26,11 +21,8 @@ class MeterChart extends Component {
             });
         }
 
-        // TODO: pass this.props.meterID
-        // insert data into optionsData
-        // this.props.data
-        // parent should pass results[0]
-        this.insertData(this.props.data);
+
+        this.compileData(this.props.meterID, this.props.data);
 
         // create chart
         this.chart = new Highcharts[this.props.type || "Chart"](
@@ -40,8 +32,9 @@ class MeterChart extends Component {
 
     }
 
-    insertData = (data) => {
-        this.optionsData.series = [
+    // takes data from props and compils into chart options
+    compileData = (meterID, data) => {
+        this.chartOptions.series = [
             {
                 name: 'Water Demand',
                 type: 'column',
@@ -61,10 +54,13 @@ class MeterChart extends Component {
                 }
             }
         ];
-        this.optionsData.xAxis = [{
+        this.chartOptions.xAxis = [{
             categories: data.demand_ts.map(d => {return parseFloat(d.timestamp)}),
             crosshair: true
         }];
+        this.chartOptions.subtitle = {
+            text: meterID
+        }
     }
 
     // unmount chart
