@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import MeterChart from './MeterChart';
 
 class Map extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+        chart: null
+    };
   }
 
     componentDidMount() {
@@ -21,7 +24,7 @@ class Map extends Component {
     // loop through the Geo Data and call the addMarker function to add each meter onto the map
 
     generateMap = () => {
-        // fetch data from API, remove CORS
+        // fetch data from API
         fetch(
             // use cors-anywhere to solve the cors issue
             'https://cors-anywhere.herokuapp.com/https://lilcortexbucket.blob.core.windows.net/public/meters.json',
@@ -33,31 +36,44 @@ class Map extends Component {
             }
             return response.json();
         }).then(results =>{
-            console.log(results);
+
+            /***** CREATING MAP *****/
 
             // loop through the data to obatin the avg lat & lng values as center for the map initialization
             let numMeters = 0;
             let sumlat = 0;
             let sumlng = 0;
-
             for (let meterID in results){
                 sumlat += parseFloat(results[meterID].meter_latitude);
                 sumlng += parseFloat(results[meterID].meter_longitude);
                 numMeters ++;
             }
-
-            console.log(sumlat/numMeters, sumlng/numMeters, numMeters);
-
             // initialize map with averaged value of center
             this.map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: sumlat/numMeters, lng: sumlng/numMeters},
                 zoom: 10
             });
-    
+
+            // TODO: for testing only
+            let lastMeterID = "";
+
             // add meter markers to map
             for (let meterID in results){
                 this.addMarker(meterID, results[meterID]);
+                lastMeterID = meterID;
             }
+
+            //TODO: create chart when marker clicked
+
+            /***** CREATING CHART *****/
+            let newChart = <MeterChart 
+                modules={[]}
+                container="myChart"
+                meterID={lastMeterID}
+                data={results[lastMeterID]}
+            />;
+            this.setState({chart: newChart});
+            
         }). catch(err => {
             console.log(err);
         })
@@ -77,8 +93,11 @@ class Map extends Component {
 
   render() {
     return (
-      <div id="map" style={{height:'500px', width:'100%'}}></div>
-    )
+        <div>
+            <div id="map" style={{height:'300px', width:'100%'}}></div>
+            {this.state.chart}
+        </div>
+    );
   }
 }
 

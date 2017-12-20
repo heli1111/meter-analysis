@@ -27,7 +27,8 @@ Keep in mind that all values are string in the JSON data!
 	  "demand_ts": 
     [{
 		  	"timestamp": "2017-10-06 0:00", 
-		  	"demand_value": "102.60414" 
+			  "demand_value": "102.60414"
+			  
 		  }, 
       {
 		  	"timestamp": "2017-10-06 0:05",
