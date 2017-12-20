@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 
 export default {
     chart: {
-        zoomType: 'xy'
+        zoomType: 'x'
     },
     title: {
         text: 'Average Monthly Temperature and Rainfall'

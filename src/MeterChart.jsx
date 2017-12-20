@@ -33,11 +33,30 @@ class MeterChart extends Component {
 
     // takes data from props and compils into chart options
     compileData = (meterID, data) => {
+        
+        // reformat data
+        let graphData = []
+        for (let point of data.demand_ts) {
+            let color = 'blue';
+            if (parseFloat(point.demand_value) > data.threshold) {
+                color = 'red';
+            }
+            graphData.push({
+                x: Date.parse(point.timestamp), 
+                y: parseFloat(point.demand_value),
+                color: color
+            });
+        }
+        
+        this.chartOptions.subtitle = {
+            text: meterID
+        }
+
         this.chartOptions.series = [
             {
                 name: 'Water Demand',
                 type: 'column',
-                data: data.demand_ts.map(d => {return parseFloat(d.demand_value)}),
+                data: graphData,
                 color: Highcharts.getOptions().colors[0],
                 tooltip: {
                     valueSuffix: ' mm'
@@ -46,20 +65,23 @@ class MeterChart extends Component {
             {
                 name: 'Water Demand',
                 yAxis: 1,
-                data: data.demand_ts.map(d => {return parseFloat(d.demand_value)}),
+                data: graphData,
                 color: Highcharts.getOptions().colors[1],
                 tooltip: {
                     valueSuffix: ' mm'
-                }
-            }
-        ];
+                },
+                //threshold: 100
+            },
+        ]
+
         this.chartOptions.xAxis = [{
-            categories: data.demand_ts.map(d => {return parseFloat(d.timestamp)}),
+            type: 'datetime',
+            title: {
+                text: 'Date'
+            },
             crosshair: true
         }];
-        this.chartOptions.subtitle = {
-            text: meterID
-        }
+
     }
 
     // unmount chart
