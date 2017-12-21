@@ -106,24 +106,8 @@ class MapView extends Component {
         }
     }
 
-    // event listener for the marker, when clicked, pass props to generate new chart
-    handleClick = () => {
-        return function(marker) {
-            let newChart = <MeterChart 
-                modules={[Export]}
-                container="myChart"
-                meterID={meterID}
-                data={meterData}
-                height='500px'
-                width='100%'
-            />;
-            this.setState({chart: newChart});
-        }
-    }
     render() {
         let mapWidth = this.state.chart ? 4 : 12;
-        let textStyle = {textAlign: 'center', paddingTop: '180px', color: 'grey'};
-        let text = this.state.chart ? null : <h4 style={textStyle}>Please click on a marker to display graph</h4>;
         return (
             <Grid fluid={true}>
                 <Row className="show-grid">
