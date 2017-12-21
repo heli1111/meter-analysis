@@ -47,6 +47,7 @@ class MeterChart extends Component {
                     valueSuffix: ' m3',
                     valueDecimals: 2
                 },
+                pointPadding: 0.1
             },
             {
                 name: 'Hourly Maximum (m3)',
@@ -57,6 +58,7 @@ class MeterChart extends Component {
                     valueSuffix: ' m3',
                     valueDecimals: 2
                 },
+                pointPadding: 0.3
             },
             {
                 name: 'Hourly Average (USG)',

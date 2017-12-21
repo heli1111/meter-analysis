@@ -57,4 +57,12 @@ export default {
         shadow: false,
         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
     },
+    plotOptions: {
+        column: {
+            //stacking: 'normal',
+            grouping: false,
+            shadow: false,
+            borderWidth: 0
+        }
+    }
 }

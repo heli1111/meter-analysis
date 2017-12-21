@@ -99,10 +99,10 @@ class MapView extends Component {
                 meterID={meterID}
                 data={meterData}
             />;
-            let pos = marker.getPosition();
-            this.map.setCenter(marker.getPosition());
             this.setState({chart: null});
             this.setState({chart: newChart});
+            google.maps.event.trigger(map, 'resize');
+            this.map.setCenter(marker.getPosition());
         }
     }
 
@@ -121,18 +121,17 @@ class MapView extends Component {
         }
     }
     render() {
-        //let mapWidth = this.state.chart ? 4 : 12;
+        let mapWidth = this.state.chart ? 4 : 12;
         let textStyle = {textAlign: 'center', paddingTop: '180px', color: 'grey'};
         let text = this.state.chart ? null : <h4 style={textStyle}>Please click on a marker to display graph</h4>;
         return (
             <Grid fluid={true}>
                 <Row className="show-grid">
-                    <Col xs={12} md={4}>
+                    <Col xs={12} md={mapWidth}>
                         <div id="map" style={{height:'400px', width:'100%'}}></div>        
                     </Col>
                     <Col xs={12} md={8}>
                         {this.state.chart}
-                        {text}
                     </Col>
                 </Row>
             </Grid>
