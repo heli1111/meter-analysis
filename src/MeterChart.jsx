@@ -12,8 +12,8 @@ class MeterChart extends Component {
         this.chartOptions = chartOptions;
         this.avgData = []
         this.maxData = []
-        this.colorAvg = '#5c83e8';
-        this.colorMax = '#1c3cdc';
+        this.colorAvg = '#48cdf2';
+        this.colorMax = '#29a2c4';
         this.colorUSG = '#80c6e8';
         this.colorThreshold = '#fe6754';
     }
@@ -36,6 +36,21 @@ class MeterChart extends Component {
         this.chartOptions.subtitle = {
             text: "Meter ID: " + this.props.meterID
         }
+
+        console.log(this.chartOptions.yAxis[0]);
+
+        this.chartOptions.yAxis[0].plotLines = [{
+            value: this.props.data.threshold,
+            color: 'red',
+            dashStyle: 'shortdash',
+            width: 1,
+            label: {
+                text: 'Threshold: ' + this.props.data.threshold.toString(),
+                style: {
+                    color: this.colorThreshold,
+                }
+            }
+        }]
 
         this.chartOptions.series = [
             {
@@ -81,11 +96,12 @@ class MeterChart extends Component {
                 }
             },
             {
-                name: 'Average Hourly Cost: $' + hourlyCost.toString(),
-                color: 'white'
+                type: 'column',   
+                name: 'Demand Exceeding Threshold',
+                color: this.colorThreshold
             },
             {
-                name: 'Threshold: ' + this.props.data.threshold.toString(),
+                name: 'Average Hourly Cost: $' + hourlyCost.toString(),
                 color: 'white'
             }
         ]

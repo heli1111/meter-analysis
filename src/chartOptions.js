@@ -4,7 +4,8 @@ import Highcharts from 'highcharts';
 
 export default {
     chart: {
-        zoomType: 'x'
+        zoomType: 'x',
+        margin: [50, 100, 80, 100]
     },
     title: {
         text: 'Hourly Water Demand'
@@ -52,7 +53,7 @@ export default {
         align: 'bottom',
         //x: 50,
         //verticalAlign: 'bottom',
-        y: 10,
+        y: 20,
         floating: false,
         shadow: false,
         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
