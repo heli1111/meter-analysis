@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-import Nav from './Nav';
-import Map from './Map';
-import MeterChart from './MeterChart';
+import Navigation from './Navigation';
+import MapView from './MapView';
 
-class App extends Component {
-    render() {
-        return (
-            <div>
-                <Nav />
-                <Map />
-            </div>
-        );
-    }
-}
+const App = props => (
+    <div>
+        <Navigation />
+        <MapView />
+    </div>
+);
+
 export default App;
 

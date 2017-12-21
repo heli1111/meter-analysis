@@ -7,33 +7,30 @@ export default {
         zoomType: 'x'
     },
     title: {
-        text: 'Water Demand'
-    },
-    lang: {
-        thousandsSep: ','
+        text: 'Hourly Water Demand'
     },
     yAxis: [{ // Primary yAxis
         labels: {
-            format: '{value}m3',
+            format: '{value:,.0f} m3',
             style: {
-                color: Highcharts.getOptions().colors[1]
+                color: '#5c83e8',
             }
         },
         title: {
-            text: 'Hourly Water Demand in m3',
+            text: 'Water Demand in m3',
             style: {
-                color: Highcharts.getOptions().colors[1]
+                color: '#5c83e8',
             }
         }
     }, { // Secondary yAxis
         title: {
-            text: 'Hourly Water Demand in USG',
+            text: 'Water Demand in USG',
             style: {
-                color: Highcharts.getOptions().colors[0]
+                color: '#5c83e8',
             }
         },
         labels: {
-            format: '{value} USG',
+            format: '{value:,.0f} USG',
             style: {
                 color: Highcharts.getOptions().colors[0]
             }
@@ -43,7 +40,7 @@ export default {
     xAxis: [{
         type: 'datetime',
         title: {
-            text: 'Date'
+            text: 'Time'
         },
         crosshair: true
     }],
@@ -51,12 +48,13 @@ export default {
         shared: true
     },
     legend: {
-        layout: 'vertical',
-        align: 'left',
-        x: 120,
-        verticalAlign: 'top',
-        y: 100,
-        floating: true,
+        layout: 'horizontal',
+        align: 'bottom',
+        //x: 50,
+        //verticalAlign: 'bottom',
+        y: 10,
+        floating: false,
+        shadow: false,
         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
     },
 }

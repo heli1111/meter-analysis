@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
+import {Grid, Row, Col} from 'react-bootstrap';
 import MeterChart from './MeterChart';
-import Details from './Details';
 import Export from 'highcharts/modules/exporting';
 
-class Map extends Component {
+class MapView extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            chart: null,
-            details: null
+            chart: null
         };
         this.map = null;
         this.markers = [];
@@ -85,13 +84,13 @@ class Map extends Component {
         })
         
         marker.addListener('click', 
-            this.getClickHandler(meterID, meterData));
+            this.getClickHandler(meterID, meterData, marker));
 
         this.markers.push(marker);
     }
 
     // closure function to pass data to clickhandler
-    getClickHandler = (meterID, meterData) => {
+    getClickHandler = (meterID, meterData, marker) => {
         return () => {
             // add new chart
             let newChart = <MeterChart 
@@ -100,17 +99,10 @@ class Map extends Component {
                 meterID={meterID}
                 data={meterData}
             />;
+            let pos = marker.getPosition();
+            this.map.setCenter(marker.getPosition());
             this.setState({chart: null});
             this.setState({chart: newChart});
-            // add new details
-            let newDetails = <Details
-                meter_id={meterID}
-                threshold={1}
-                average={2}
-                cost={3}
-            />;
-            this.setState({details: null});
-            this.setState({details: newDetails});
         }
     }
 
@@ -122,19 +114,30 @@ class Map extends Component {
                 container="myChart"
                 meterID={meterID}
                 data={meterData}
+                height='500px'
+                width='100%'
             />;
             this.setState({chart: newChart});
         }
     }
     render() {
+        //let mapWidth = this.state.chart ? 4 : 12;
+        let textStyle = {textAlign: 'center', paddingTop: '180px', color: 'grey'};
+        let text = this.state.chart ? null : <h4 style={textStyle}>Please click on a marker to display graph</h4>;
         return (
-            <div>
-                <div id="map" style={{height:'300px', width:'100%'}}></div>
-                {this.state.chart}
-                {this.state.details}
-            </div>
+            <Grid fluid={true}>
+                <Row className="show-grid">
+                    <Col xs={12} md={4}>
+                        <div id="map" style={{height:'400px', width:'100%'}}></div>        
+                    </Col>
+                    <Col xs={12} md={8}>
+                        {this.state.chart}
+                        {text}
+                    </Col>
+                </Row>
+            </Grid>
         );
     }
 }
 
-export default Map;
+export default MapView;
